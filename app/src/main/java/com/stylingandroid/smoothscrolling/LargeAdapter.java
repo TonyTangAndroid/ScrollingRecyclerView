@@ -14,6 +14,10 @@ public final class LargeAdapter extends RecyclerView.Adapter<LargeAdapter.ViewHo
     private static final int SIZE = 1000;
     private final List<String> items;
 
+    private LargeAdapter(List<String> items) {
+        this.items = items;
+    }
+
     public static LargeAdapter newInstance(Context context) {
         List<String> items = new ArrayList<>();
         String format = context.getString(R.string.item_string);
@@ -21,10 +25,6 @@ public final class LargeAdapter extends RecyclerView.Adapter<LargeAdapter.ViewHo
             items.add(String.format(format, i + 1));
         }
         return new LargeAdapter(items);
-    }
-
-    private LargeAdapter(List<String> items) {
-        this.items = items;
     }
 
     @Override
@@ -47,14 +47,14 @@ public final class LargeAdapter extends RecyclerView.Adapter<LargeAdapter.ViewHo
     public static final class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
 
-        public static ViewHolder newInstance(View itemView) {
-            TextView textView = (TextView) itemView.findViewById(android.R.id.text1);
-            return new ViewHolder(itemView, textView);
-        }
-
         private ViewHolder(View itemView, TextView textView) {
             super(itemView);
             this.textView = textView;
+        }
+
+        public static ViewHolder newInstance(View itemView) {
+            TextView textView = itemView.findViewById(android.R.id.text1);
+            return new ViewHolder(itemView, textView);
         }
 
         public void setText(CharSequence text) {

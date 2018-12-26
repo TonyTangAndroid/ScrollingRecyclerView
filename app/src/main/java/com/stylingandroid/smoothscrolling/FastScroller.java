@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -22,14 +23,11 @@ public class FastScroller extends LinearLayout {
     private static final String SCALE_X = "scaleX";
     private static final String SCALE_Y = "scaleY";
     private static final String ALPHA = "alpha";
-
-    private View bubble;
-    private View handle;
-
-    private RecyclerView recyclerView;
-
     private final HandleHider handleHider = new HandleHider();
     private final ScrollListener scrollListener = new ScrollListener();
+    private View bubble;
+    private View handle;
+    private RecyclerView recyclerView;
     private int height;
 
     private AnimatorSet currentAnimator = null;
@@ -54,11 +52,12 @@ public class FastScroller extends LinearLayout {
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
+    protected void onSizeChanged(int w, int h, int oldW, int oldH) {
+        super.onSizeChanged(w, h, oldW, oldH);
         height = h;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
@@ -81,12 +80,14 @@ public class FastScroller extends LinearLayout {
 
     public void setRecyclerView(RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
-        recyclerView.setOnScrollListener(scrollListener);
+        recyclerView.addOnScrollListener(scrollListener);
     }
 
     private void setRecyclerViewPosition(float y) {
         if (recyclerView != null) {
-            int itemCount = recyclerView.getAdapter().getItemCount();
+            RecyclerView.Adapter adapter = recyclerView.getAdapter();
+            assert adapter != null;
+            int itemCount = adapter.getItemCount();
             float proportion;
             if (bubble.getY() == 0) {
                 proportion = 0f;
@@ -95,22 +96,22 @@ public class FastScroller extends LinearLayout {
             } else {
                 proportion = y / (float) height;
             }
-            int targetPos = getValueInRange(0, itemCount - 1, (int) (proportion * (float) itemCount));
+            int targetPos = getValueInRange(itemCount - 1, (int) (proportion * (float) itemCount));
             recyclerView.scrollToPosition(targetPos);
         }
     }
 
-    private int getValueInRange(int min, int max, int value) {
-        int minimum = Math.max(min, value);
+    private int getValueInRange(int max, int value) {
+        int minimum = Math.max(0, value);
         return Math.min(minimum, max);
     }
 
     private void setPosition(float y) {
         float position = y / height;
         int bubbleHeight = bubble.getHeight();
-        bubble.setY(getValueInRange(0, height - bubbleHeight, (int) ((height - bubbleHeight) * position)));
+        bubble.setY(getValueInRange(height - bubbleHeight, (int) ((height - bubbleHeight) * position)));
         int handleHeight = handle.getHeight();
-        handle.setY(getValueInRange(0, height - handleHeight, (int) ((height - handleHeight) * position)));
+        handle.setY(getValueInRange(height - handleHeight, (int) ((height - handleHeight) * position)));
     }
 
     private void showHandle() {
@@ -160,12 +161,14 @@ public class FastScroller extends LinearLayout {
 
     private class ScrollListener extends OnScrollListener {
         @Override
-        public void onScrolled(RecyclerView rv, int dx, int dy) {
+        public void onScrolled(@NonNull RecyclerView rv, int dx, int dy) {
             View firstVisibleView = recyclerView.getChildAt(0);
-            int firstVisiblePosition = recyclerView.getChildPosition(firstVisibleView);
+            int firstVisiblePosition = recyclerView.getChildAdapterPosition(firstVisibleView);
             int visibleRange = recyclerView.getChildCount();
             int lastVisiblePosition = firstVisiblePosition + visibleRange;
-            int itemCount = recyclerView.getAdapter().getItemCount();
+            RecyclerView.Adapter adapter = recyclerView.getAdapter();
+            assert adapter != null;
+            int itemCount = adapter.getItemCount();
             int position;
             if (firstVisiblePosition == 0) {
                 position = 0;
