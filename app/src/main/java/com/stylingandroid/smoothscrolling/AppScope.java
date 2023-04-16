@@ -10,6 +10,7 @@ public interface AppScope extends Creatable<NoDependencies>, AppDependencies {
   abstract class Objects implements AppObjects {}
 
   interface AppObjects {
+    DerivedStreaming derivedStreaming();
 
     PublishableOnScrollListener PublishableOnScrollListener();
 
