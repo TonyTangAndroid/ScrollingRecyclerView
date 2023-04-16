@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
+import timber.log.Timber;
 
 public final class LargeAdapter extends RecyclerView.Adapter<ItemViewHolder> {
 
@@ -38,7 +39,8 @@ public final class LargeAdapter extends RecyclerView.Adapter<ItemViewHolder> {
   @Override
   public void onBindViewHolder(ItemViewHolder holder, int position) {
     String text = items.get(position);
-    holder.setText(text);
+    Timber.i("[onBindViewHolder:%s:%s]", position, text);
+    holder.bindView(text);
   }
 
   @Override

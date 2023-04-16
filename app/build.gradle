@@ -22,5 +22,7 @@ android {
 }
 
 dependencies {
+    debugImplementation 'com.github.TonyTangAndroid.Wood:wood:0.9.9.2'
+    releaseImplementation 'com.github.TonyTangAndroid.Wood:wood-no-op:0.9.9.2'
     api 'androidx.recyclerview:recyclerview:1.3.0'
 }

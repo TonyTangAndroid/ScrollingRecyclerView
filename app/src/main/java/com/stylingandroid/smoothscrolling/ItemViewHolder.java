@@ -14,11 +14,12 @@ public final class ItemViewHolder extends RecyclerView.ViewHolder {
   }
 
   public static ItemViewHolder newInstance(View itemView) {
-    TextView textView = (TextView) itemView.findViewById(android.R.id.text1);
+    TextView textView = itemView.findViewById(android.R.id.text1);
     return new ItemViewHolder(itemView, textView);
   }
 
-  public void setText(CharSequence text) {
+  public void bindView(CharSequence text) {
+
     textView.setText(text);
   }
 }
