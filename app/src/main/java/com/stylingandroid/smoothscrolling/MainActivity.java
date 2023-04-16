@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
   private void observeScrolledEventToRefreshItem() {
     throttleScrolledEvent()
+        .observeOn(AndroidSchedulers.mainThread())
         .as(autoDisposable(AndroidLifecycleScopeProvider.from(this)))
         .subscribe(this::onScrolled);
   }
