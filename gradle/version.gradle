@@ -3,6 +3,7 @@ ext {
     commonsLang3 = '3.12.0'
     retrofit = '2.7.2'
     okhttp = '4.9.3'
+    roborazzi = '1.0.0-rc-2'
     rib = '0.13.2'
     motif = '0.4.0-alpha02'
     projectVersion = [
