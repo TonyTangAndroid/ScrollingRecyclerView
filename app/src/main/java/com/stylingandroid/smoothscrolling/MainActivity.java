@@ -1,14 +1,17 @@
 package com.stylingandroid.smoothscrolling;
 
-import android.app.Activity;
+import static com.uber.autodispose.AutoDispose.autoDisposable;
+
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 import timber.log.Timber;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
   private RecyclerView recyclerView;
 
@@ -16,15 +19,32 @@ public class MainActivity extends Activity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     Timber.i("[tracing]:MainActivity onCreate:%s", this);
-
     setContentView(R.layout.activity_main);
     recyclerView = findViewById(R.id.recyclerview);
-    int duration = getResources().getInteger(R.integer.scroll_duration);
-    recyclerView.setLayoutManager(
-        new ScrollingLinearLayoutManager(this, LinearLayoutManager.VERTICAL, false, duration));
-    recyclerView.addOnScrollListener(
-        (((AppPortal) getApplication()).appDependencies().publishableOnScrollListener()));
+    recyclerView.setLayoutManager(layoutManager());
+    recyclerView.addOnScrollListener(appDependencies().publishableOnScrollListener());
     recyclerView.setAdapter(LargeAdapter.newInstance(this));
+    appDependencies()
+        .scrollEventStreaming()
+        .streaming()
+        .as(autoDisposable(AndroidLifecycleScopeProvider.from(this)))
+        .subscribe(this::onEventEmitted);
+  }
+
+  private void onEventEmitted(ScrollEvent scrollEvent) {
+    Timber.i("[ScrollEvent]:%s", scrollEvent);
+  }
+
+  private ScrollingLinearLayoutManager layoutManager() {
+    return new ScrollingLinearLayoutManager(
+        this,
+        LinearLayoutManager.VERTICAL,
+        false,
+        getResources().getInteger(R.integer.scroll_duration));
+  }
+
+  private AppDependencies appDependencies() {
+    return ((AppPortal) getApplication()).appDependencies();
   }
 
   @Override
