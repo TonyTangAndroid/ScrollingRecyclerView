@@ -15,10 +15,10 @@ public class MainActivity extends Activity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    Timber.i("MainActivity onCreate:%s", this);
+    Timber.i("[tracing]:MainActivity onCreate:%s", this);
 
     setContentView(R.layout.activity_main);
-    recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+    recyclerView = findViewById(R.id.recyclerview);
     recyclerView.setAdapter(LargeAdapter.newInstance(this));
     int duration = getResources().getInteger(R.integer.scroll_duration);
     recyclerView.setLayoutManager(

@@ -9,6 +9,6 @@ public final class App extends Application {
   public void onCreate() {
     super.onCreate();
     TimberUtil.init(this);
-    Timber.i("App onCreate:%s", this);
+    Timber.i("[tracing]:App onCreate:%s", this);
   }
 }
