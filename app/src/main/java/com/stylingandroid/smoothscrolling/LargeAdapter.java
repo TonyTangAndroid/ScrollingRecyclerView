@@ -11,14 +11,14 @@ import timber.log.Timber;
 
 public final class LargeAdapter extends RecyclerView.Adapter<ItemViewHolder> {
 
-  private final List<String> items;
+  private final List<ItemData> items;
 
-  private LargeAdapter(List<String> items) {
+  private LargeAdapter(List<ItemData> items) {
     this.items = items;
   }
 
   public static LargeAdapter newInstance(Context context) {
-    List<String> items = DataSourceUtil.dataSource(context);
+    List<ItemData> items = DataSourceUtil.dataSource(context);
     return new LargeAdapter(items);
   }
 
@@ -38,13 +38,22 @@ public final class LargeAdapter extends RecyclerView.Adapter<ItemViewHolder> {
 
   @Override
   public void onBindViewHolder(ItemViewHolder holder, int position) {
-    String text = items.get(position);
-    Timber.i("[tracing]:onBindViewHolder:%s:%s", position, text);
-    holder.bindView(text);
+    ItemModel model = model(position);
+    Timber.i("[tracing]:onBindViewHolder:%s:%s", model.position(), model.data());
+    holder.bindView(model);
+  }
+
+  private ItemModel model(int position) {
+    ItemData item = items.get(position);
+    return ItemModel.create(position, item);
   }
 
   @Override
   public int getItemCount() {
     return items.size();
+  }
+
+  public List<ItemData> items() {
+    return items;
   }
 }

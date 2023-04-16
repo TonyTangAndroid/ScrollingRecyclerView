@@ -2,6 +2,7 @@ package com.stylingandroid.smoothscrolling;
 
 import static com.uber.autodispose.AutoDispose.autoDisposable;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -9,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import java.util.concurrent.TimeUnit;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +27,49 @@ public class MainActivity extends AppCompatActivity {
     recyclerView.setLayoutManager(layoutManager());
     recyclerView.addOnScrollListener(appDependencies().publishableOnScrollListener());
     recyclerView.setAdapter(LargeAdapter.newInstance(this));
+    observeScrollEventToLog();
+    observeScrolledEventToRefreshItem();
+  }
+
+  private void observeScrolledEventToRefreshItem() {
+    appDependencies()
+        .scrollEventStreaming()
+        .scrolledEvent()
+        .throttleLast(100, TimeUnit.MILLISECONDS)
+        .observeOn(AndroidSchedulers.mainThread())
+        .as(autoDisposable(AndroidLifecycleScopeProvider.from(this)))
+        .subscribe(this::onScrolled);
+  }
+
+  private void onScrolled(ScrolledEvent event) {
+    RecyclerView rvPercentage = event.target();
+    LinearLayoutManager layoutManager = ((LinearLayoutManager) rvPercentage.getLayoutManager());
+    final int firstPosition = layoutManager.findFirstVisibleItemPosition();
+    final int lastPosition = layoutManager.findLastVisibleItemPosition();
+    Rect rvRect = new Rect();
+    rvPercentage.getGlobalVisibleRect(rvRect);
+    for (int i = firstPosition; i <= lastPosition; i++) {
+      Rect rowRect = new Rect();
+      layoutManager.findViewByPosition(i).getGlobalVisibleRect(rowRect);
+
+      int percentFirst;
+      if (rowRect.bottom >= rvRect.bottom) {
+        int visibleHeightFirst = rvRect.bottom - rowRect.top;
+        percentFirst = (visibleHeightFirst * 100) / layoutManager.findViewByPosition(i).getHeight();
+      } else {
+        int visibleHeightFirst = rowRect.bottom - rvRect.top;
+        percentFirst = (visibleHeightFirst * 100) / layoutManager.findViewByPosition(i).getHeight();
+      }
+      if (percentFirst > 100) {
+        percentFirst = 100;
+      }
+      LargeAdapter adapter = (LargeAdapter) rvPercentage.getAdapter();
+      adapter.items().get(i).setPercentage(percentFirst);
+      adapter.notifyItemChanged(i);
+    }
+  }
+
+  private void observeScrollEventToLog() {
     appDependencies()
         .scrollEventStreaming()
         .streaming()

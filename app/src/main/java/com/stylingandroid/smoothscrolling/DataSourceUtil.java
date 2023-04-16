@@ -8,11 +8,11 @@ public class DataSourceUtil {
 
   private static final int SIZE = 1000;
 
-  static List<String> dataSource(Context context) {
-    List<String> items = new ArrayList<>();
+  static List<ItemData> dataSource(Context context) {
+    List<ItemData> items = new ArrayList<>();
     String format = context.getString(R.string.item_string);
     for (int i = 0; i < SIZE; i++) {
-      items.add(String.format(format, i + 1));
+      items.add(new ItemData(String.format(format, i + 1)));
     }
     return items;
   }

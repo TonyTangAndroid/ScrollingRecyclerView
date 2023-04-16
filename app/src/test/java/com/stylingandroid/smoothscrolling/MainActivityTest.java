@@ -1,20 +1,20 @@
 package com.stylingandroid.smoothscrolling;
 
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.google.common.truth.Truth.assertThat;
 
 import androidx.test.core.app.ActivityScenario;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 import io.reactivex.observers.TestObserver;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.annotation.Config;
 
-@Config(application = App.class)
-@RunWith(AndroidJUnit4.class)
-public class MainActivityTest {
+public class MainActivityTest extends SchedulerBaseTest {
 
   @Test
-  public void case_0_whenActivityCreated_willStillNotReceiveEvent() {
+  public void case_0_whenActivityCreated_willReceiveEvent() {
     TestObserver<ScrollEvent> test = TestStreamingUtil.streaming().test();
     test.assertNoErrors();
     assertThat(test.valueCount()).isEqualTo(0);
@@ -23,7 +23,53 @@ public class MainActivityTest {
     }
   }
 
+  @Test
+  public void case_1_whenTimePassed_willRenderPercentage() {
+    TestObserver<ScrollEvent> test = TestStreamingUtil.streaming().test();
+    test.assertNoErrors();
+    assertThat(test.valueCount()).isEqualTo(0);
+    try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
+      advanceTimer(100);
+      triggerMainAction();
+      scenario.onActivity(this::assertTextViewRendered);
+    }
+  }
+
+  @Test
+  public void case_2_whenTimeNotPassed_willNotRenderPercentage() {
+    TestObserver<ScrollEvent> test = TestStreamingUtil.streaming().test();
+    test.assertNoErrors();
+    assertThat(test.valueCount()).isEqualTo(0);
+    try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
+      advanceTimer(90);
+      triggerMainAction();
+      scenario.onActivity(this::assertTextViewNotRendered);
+    }
+  }
+
+  @Test
+  public void case_3_whenActionNotTriggered_willNotRenderPercentage() {
+    TestObserver<ScrollEvent> test = TestStreamingUtil.streaming().test();
+    test.assertNoErrors();
+    assertThat(test.valueCount()).isEqualTo(0);
+    try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)) {
+      advanceTimer(100);
+      //      triggerMainAction();
+      scenario.onActivity(this::assertTextViewNotRendered);
+    }
+  }
+
   private void assertStreamingEvent(TestObserver<ScrollEvent> test) {
     assertThat(test.valueCount()).isGreaterThan(0);
+  }
+
+  private void assertTextViewRendered(MainActivity mainActivity) {
+    onView(withText("position 0:100 percentage visible")).check(matches(isDisplayed()));
+    //    onView(withText("position 1:100 percentage visible")).check(matches(isDisplayed()));
+  }
+
+  private void assertTextViewNotRendered(MainActivity mainActivity) {
+    onView(withText("position 0:100 percentage visible")).check(doesNotExist());
+    //    onView(withText("position 1:100 percentage visible")).check(matches(isDisplayed()));
   }
 }
