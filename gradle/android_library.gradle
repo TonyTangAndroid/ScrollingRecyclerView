@@ -35,15 +35,13 @@ dependencies {
     api "com.uber.rib:rib-android:${rib}"
     annotationProcessor "com.uber.rib:rib-compiler-test:${rib}"
 
-    api 'androidx.core:core-ktx:1.9.0'
+    api 'androidx.core:core-ktx:1.10.0'
     api 'androidx.appcompat:appcompat:1.6.1'
-
-
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.annotation:annotation:1.6.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
     implementation 'com.uber.autodispose:autodispose-android-archcomponents:1.4.0'
     implementation 'com.jakewharton.rxbinding3:rxbinding-core:3.1.0'
     implementation 'com.jakewharton.rxbinding3:rxbinding-appcompat:3.1.0'

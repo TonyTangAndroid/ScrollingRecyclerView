@@ -7,7 +7,7 @@ ext {
     motif = '0.4.0-alpha02'
     projectVersion = [
             minSdk    : 26,
-            targetSdk : 30,
+            targetSdk : 33,
             compileSdk: 33
     ]
 }
