@@ -41,6 +41,4 @@ dependencies {
     testImplementation 'it.xabaras.android.espresso:recyclerview-child-actions:1.0'
     testImplementation 'com.adevinta.android:barista:4.3.0'
     androidTestImplementation 'com.adevinta.android:barista:4.3.0'
-    testImplementation "io.github.takahirom.roborazzi:roborazzi:${roborazzi}"
-    testImplementation "io.github.takahirom.roborazzi:roborazzi-junit-rule:${roborazzi}"
 }
