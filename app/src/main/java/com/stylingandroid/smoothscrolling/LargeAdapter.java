@@ -39,7 +39,7 @@ public final class LargeAdapter extends RecyclerView.Adapter<ItemViewHolder> {
   @Override
   public void onBindViewHolder(ItemViewHolder holder, int position) {
     String text = items.get(position);
-    Timber.i("[onBindViewHolder:%s:%s]", position, text);
+    Timber.i("[tracing]:onBindViewHolder:%s:%s", position, text);
     holder.bindView(text);
   }
 
