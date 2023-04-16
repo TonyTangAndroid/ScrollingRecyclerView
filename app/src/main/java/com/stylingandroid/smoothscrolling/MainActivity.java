@@ -23,6 +23,8 @@ public class MainActivity extends Activity {
     int duration = getResources().getInteger(R.integer.scroll_duration);
     recyclerView.setLayoutManager(
         new ScrollingLinearLayoutManager(this, LinearLayoutManager.VERTICAL, false, duration));
+
+    recyclerView.addOnScrollListener(new MyOnScrollListener());
   }
 
   @Override
