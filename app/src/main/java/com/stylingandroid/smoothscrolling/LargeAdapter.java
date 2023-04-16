@@ -4,38 +4,39 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import java.util.ArrayList;
 import java.util.List;
 
-public final class LargeAdapter extends RecyclerView.Adapter<LargeAdapter.ViewHolder> {
-  private static final int SIZE = 1000;
-  private final List<String> items;
+public final class LargeAdapter extends RecyclerView.Adapter<ItemViewHolder> {
 
-  public static LargeAdapter newInstance(Context context) {
-    List<String> items = new ArrayList<>();
-    String format = context.getString(R.string.item_string);
-    for (int i = 0; i < SIZE; i++) {
-      items.add(String.format(format, i + 1));
-    }
-    return new LargeAdapter(items);
-  }
+  private final List<String> items;
 
   private LargeAdapter(List<String> items) {
     this.items = items;
   }
 
+  public static LargeAdapter newInstance(Context context) {
+    List<String> items = DataSourceUtil.dataSource(context);
+    return new LargeAdapter(items);
+  }
+
+  @NonNull
   @Override
-  public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    View view =
-        LayoutInflater.from(parent.getContext())
-            .inflate(android.R.layout.simple_list_item_1, parent, false);
-    return ViewHolder.newInstance(view);
+  public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    return ItemViewHolder.newInstance(view(parent));
+  }
+
+  private View view(ViewGroup parent) {
+    return LayoutInflater.from(parent.getContext()).inflate(layoutId(), parent, false);
+  }
+
+  private int layoutId() {
+    return android.R.layout.simple_list_item_1;
   }
 
   @Override
-  public void onBindViewHolder(ViewHolder holder, int position) {
+  public void onBindViewHolder(ItemViewHolder holder, int position) {
     String text = items.get(position);
     holder.setText(text);
   }
@@ -43,23 +44,5 @@ public final class LargeAdapter extends RecyclerView.Adapter<LargeAdapter.ViewHo
   @Override
   public int getItemCount() {
     return items.size();
-  }
-
-  public static final class ViewHolder extends RecyclerView.ViewHolder {
-    private final TextView textView;
-
-    public static ViewHolder newInstance(View itemView) {
-      TextView textView = (TextView) itemView.findViewById(android.R.id.text1);
-      return new ViewHolder(itemView, textView);
-    }
-
-    private ViewHolder(View itemView, TextView textView) {
-      super(itemView);
-      this.textView = textView;
-    }
-
-    public void setText(CharSequence text) {
-      textView.setText(text);
-    }
   }
 }
