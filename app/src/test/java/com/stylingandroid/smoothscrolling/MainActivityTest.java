@@ -24,6 +24,6 @@ public class MainActivityTest {
   }
 
   private void assertStreamingEvent(TestObserver<ScrollEvent> test) {
-    assertThat(test.valueCount()).isEqualTo(0);
+    assertThat(test.valueCount()).isGreaterThan(0);
   }
 }
