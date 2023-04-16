@@ -1,0 +1,26 @@
+name: Android main branch check
+on:
+  push:
+    branches:
+      - main
+      - releases/*
+    paths-ignore:
+      - '**.md'
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: step_0_checkout
+        uses: actions/checkout@v3.3.0
+      - name: step_1_assembleDebug
+        run: ./gradlew :app:assembleDebug
+      - name: step_2_generateCoverageReport
+        run: ./gradlew rootCoverageReport -Penable_android_test=false -Penable_unit_test=true -Pcoverage
+      - name: step_3_uploadCoverageReport
+        uses: codecov/codecov-action@v3.1.1
+        with:
+          file: ./build/reports/jacoco.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: true
+          verbose: false
