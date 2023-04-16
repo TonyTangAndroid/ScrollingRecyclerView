@@ -23,7 +23,9 @@ public class MainActivity extends AppCompatActivity {
     Timber.i("[tracing]:MainActivity onCreate:%s", this);
     setContentView(R.layout.activity_main);
     recyclerView = findViewById(R.id.recyclerview);
-    recyclerView.setLayoutManager(layoutManager());
+    ScrollingLinearLayoutManager layout = layoutManager();
+    layout.setInitialPrefetchItemCount(3);
+    recyclerView.setLayoutManager(layout);
     recyclerView.addOnScrollListener(appDependencies().publishableOnScrollListener());
     adapter = LargeAdapter.newInstance(this);
     recyclerView.setAdapter(adapter);
