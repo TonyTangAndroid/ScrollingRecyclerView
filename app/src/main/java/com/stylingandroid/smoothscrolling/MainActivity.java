@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import timber.log.Timber;
 
 public class MainActivity extends Activity {
 
@@ -14,6 +15,8 @@ public class MainActivity extends Activity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Timber.i("MainActivity onCreate:%s", this);
+
     setContentView(R.layout.activity_main);
     recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
     recyclerView.setAdapter(LargeAdapter.newInstance(this));
