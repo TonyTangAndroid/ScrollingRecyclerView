@@ -44,4 +44,34 @@ public class MainActivity extends Activity {
 
     return super.onOptionsItemSelected(item);
   }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    Timber.i("[tracing]:MainActivity onResume:%s", this);
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    Timber.i("[tracing]:MainActivity onPause:%s", this);
+  }
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+    Timber.i("[tracing]:MainActivity onStop:%s", this);
+  }
+
+  @Override
+  protected void onStart() {
+    super.onStart();
+    Timber.i("[tracing]:MainActivity onStart:%s", this);
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    Timber.i("[tracing]:MainActivity onDestroy:%s", this);
+  }
 }
