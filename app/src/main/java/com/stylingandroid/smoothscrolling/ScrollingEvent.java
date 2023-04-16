@@ -23,5 +23,7 @@ public abstract class ScrollingEvent {
      * The RecyclerView is currently animating to a final position while not under outside control.
      */
     SETTLING,
+    /** the fallback state when there is no state mapped. */
+    UNKNOWN,
   }
 }

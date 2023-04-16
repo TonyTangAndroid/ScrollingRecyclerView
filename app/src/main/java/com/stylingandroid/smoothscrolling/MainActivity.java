@@ -24,7 +24,7 @@ public class MainActivity extends Activity {
     recyclerView.setLayoutManager(
         new ScrollingLinearLayoutManager(this, LinearLayoutManager.VERTICAL, false, duration));
 
-    recyclerView.addOnScrollListener(new MyOnScrollListener());
+    recyclerView.addOnScrollListener(new PublishableOnScrollListener());
   }
 
   @Override
