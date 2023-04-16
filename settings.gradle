@@ -15,4 +15,3 @@ dependencyResolutionManagement {
 }
 rootProject.name = "ScrollingRecyclerView"
 include ':app'
-include ':robo'
