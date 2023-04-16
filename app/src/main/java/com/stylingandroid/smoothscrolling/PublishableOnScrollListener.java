@@ -4,9 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.common.collect.ImmutableMap;
 import com.jakewharton.rxrelay2.PublishRelay;
+import com.stylingandroid.smoothscrolling.ScrollEvent.Type;
 import com.stylingandroid.smoothscrolling.ScrollingEvent.State;
 import io.reactivex.Observable;
 import java.util.Optional;
+import kotlin.Unit;
 
 class PublishableOnScrollListener extends AppOnScrollListener implements ScrollEventStreaming {
 
@@ -39,5 +41,15 @@ class PublishableOnScrollListener extends AppOnScrollListener implements ScrollE
   @Override
   public Observable<ScrollEvent> streaming() {
     return publishRelay.hide();
+  }
+
+  @Override
+  public Observable<ScrolledEvent> scrolledEvent() {
+    return streaming().filter(item -> Type.SCROLLED.equals(item.type())).map(ScrollEvent::scrolled);
+  }
+
+  @Override
+  public Observable<Unit> scrolledSignal() {
+    return scrolledEvent().map(ignored -> Unit.INSTANCE);
   }
 }
