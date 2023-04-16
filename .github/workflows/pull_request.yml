@@ -8,7 +8,7 @@ on:
       - '**.md'
 jobs:
   build:
-    runs-on: tony
+    runs-on: macos-latest
     steps:
       - name: step_0_checkout
         uses: actions/checkout@v3.3.0
