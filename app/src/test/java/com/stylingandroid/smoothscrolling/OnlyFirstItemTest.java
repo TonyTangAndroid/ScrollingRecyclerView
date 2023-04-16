@@ -10,8 +10,10 @@ import static com.google.common.truth.Truth.assertThat;
 import androidx.test.core.app.ActivityScenario;
 import io.reactivex.observers.TestObserver;
 import org.junit.Test;
+import org.robolectric.annotation.GraphicsMode;
 
 /** This is only to assert that the espresso test somehow only could assert the first item. */
+@GraphicsMode(GraphicsMode.Mode.NATIVE)
 public class OnlyFirstItemTest extends SchedulerBaseTest {
 
   @Test
