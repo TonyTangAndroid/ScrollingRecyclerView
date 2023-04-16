@@ -4,6 +4,7 @@ import android.content.Context;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.google.common.truth.Truth;
+import io.reactivex.observers.TestObserver;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.annotation.Config;
@@ -13,8 +14,20 @@ import org.robolectric.annotation.Config;
 public class AppTest {
 
   @Test
-  public void test123() {
+  public void case_01_AppContextIsAppClass() {
     Context context = ApplicationProvider.getApplicationContext();
     Truth.assertThat(context).isInstanceOf(App.class);
+  }
+
+  @Test
+  public void case_02_AppContextIsAppPortal() {
+    Context context = ApplicationProvider.getApplicationContext();
+    Truth.assertThat(context).isInstanceOf(AppPortal.class);
+  }
+
+  @Test
+  public void case_03_AppContextIsAppPortal() {
+    TestObserver<ScrollEvent> test = TestStreamingUtil.streaming().test();
+    test.assertNoErrors();
   }
 }
