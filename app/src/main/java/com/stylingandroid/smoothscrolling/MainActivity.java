@@ -31,7 +31,6 @@ public class MainActivity extends Activity {
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     int id = item.getItemId();
-
     if (id == R.id.action_top) {
       recyclerView.smoothScrollToPosition(0);
       return true;
