@@ -33,7 +33,7 @@ public final class LargeAdapter extends RecyclerView.Adapter<ItemViewHolder> {
   }
 
   private int layoutId() {
-    return android.R.layout.simple_list_item_1;
+    return R.layout.item_text_large;
   }
 
   @Override
