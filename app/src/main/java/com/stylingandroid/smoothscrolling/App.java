@@ -1,6 +1,7 @@
 package com.stylingandroid.smoothscrolling;
 
 import android.app.Application;
+import timber.log.Timber;
 
 public final class App extends Application {
 
@@ -8,5 +9,6 @@ public final class App extends Application {
   public void onCreate() {
     super.onCreate();
     TimberUtil.init(this);
+    Timber.i("App onCreate:%s", this);
   }
 }
