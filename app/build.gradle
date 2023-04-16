@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'io.github.takahirom.roborazzi'
 }
 apply from: "${rootDir}/gradle/android_library.gradle"
 
@@ -11,6 +12,12 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
     }
 
     buildTypes {
@@ -34,4 +41,6 @@ dependencies {
     testImplementation 'it.xabaras.android.espresso:recyclerview-child-actions:1.0'
     testImplementation 'com.adevinta.android:barista:4.3.0'
     androidTestImplementation 'com.adevinta.android:barista:4.3.0'
+    testImplementation("io.github.takahirom.roborazzi:roborazzi:${roborazzi}")
+    testImplementation("io.github.takahirom.roborazzi:roborazzi-junit-rule:${roborazzi}")
 }
