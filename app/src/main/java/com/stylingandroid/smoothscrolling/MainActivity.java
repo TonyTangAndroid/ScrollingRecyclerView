@@ -47,14 +47,15 @@ public class MainActivity extends AppCompatActivity {
 
   private void onScrolled(ScrolledEvent event) {
     ScrolledModel assemble = ScrolledModelMapper.assemble(event);
-    assemble.list().forEach(this::renderItem);
+    assemble.list().forEach(item -> renderItem(item, assemble.topLayoutSpec()));
   }
 
-  private void renderItem(ScrolledItem item) {
-    ItemData itemData = adapter.items().get(item.position());
-    if (itemData.percentage() != item.percentage()) {
-      itemData.setPercentage(item.percentage());
-      adapter.notifyItemChanged(item.position());
+  private void renderItem(ScrolledItem item, TopLayoutSpec targetLayout) {
+    ItemData itemData = adapter.items().get(item.adapterPosition());
+    int visiblePercentage = PercentageMapper.calculate(item, targetLayout);
+    if (itemData.percentage() != visiblePercentage) {
+      itemData.setPercentage(visiblePercentage);
+      adapter.notifyItemChanged(item.adapterPosition());
     }
   }
 

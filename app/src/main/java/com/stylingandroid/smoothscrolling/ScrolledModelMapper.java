@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.LayoutManager;
 import com.google.common.collect.ImmutableList;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import timber.log.Timber;
 
 public class ScrolledModelMapper {
@@ -15,62 +17,52 @@ public class ScrolledModelMapper {
   private ScrolledModelMapper() {}
 
   public static ScrolledModel assemble(ScrolledEvent event) {
-    RecyclerView target = event.target();
-    LayoutManager layoutManager = target.getLayoutManager();
-    if (!(layoutManager instanceof LinearLayoutManager)) {
-      return ScrolledModel.create(ImmutableList.of());
+    LayoutManager layoutManager = event.target().getLayoutManager();
+    if (layoutManager instanceof LinearLayoutManager) {
+      return map(event.target(), (LinearLayoutManager) layoutManager);
     } else {
-      return map(target, (LinearLayoutManager) layoutManager);
+      throw new UnsupportedOperationException();
     }
   }
 
   private static ScrolledModel map(RecyclerView target, LinearLayoutManager layoutManager) {
     if (layoutManager.getOrientation() == LinearLayoutManager.HORIZONTAL) {
       Timber.i("Only support vertical layout manager for now.");
-      return ScrolledModel.create(ImmutableList.of());
+      return ScrolledModel.create(ImmutableList.of(), null);
     } else {
-      return mapInternal(target, layoutManager);
+      return mapInternal(layoutManager, topLayoutSpec(target, layoutManager));
     }
   }
 
-  private static ScrolledModel mapInternal(RecyclerView target, LinearLayoutManager layoutManager) {
-    TargetLayout targetLayout = targetLayout(target, layoutManager);
-    int bottom = targetLayout.rectEntity().bottom();
-    int top = targetLayout.rectEntity().top();
-    List<ScrolledItem> list = new ArrayList<>();
-    for (int i = targetLayout.firstPosition(); i <= targetLayout.lastPosition(); i++) {
-      View itemView = layoutManager.findViewByPosition(i);
-      if (itemView == null) {
-        continue;
-      }
-      list.add(getScrolledItem(bottom, top, i, itemView));
-    }
-    return ScrolledModel.create(ImmutableList.copyOf(list));
+  private static ScrolledModel mapInternal(
+      LinearLayoutManager layoutManager, TopLayoutSpec topLayoutSpec) {
+    return ScrolledModel.create(scrolledItemList(layoutManager, topLayoutSpec), topLayoutSpec);
   }
 
-  private static ScrolledItem getScrolledItem(int bottom, int top, int i, View itemView) {
-    RectEntity rowRect = rectEntity(itemView);
-    int percentFirst;
-    int visibleHeightFirst;
-    if (rowRect.bottom() >= bottom) {
-      visibleHeightFirst = bottom - rowRect.top();
-    } else {
-      visibleHeightFirst = rowRect.bottom() - top;
-    }
-    int height = itemView.getHeight();
-    percentFirst = Math.min(100, visibleHeightFirst * 100 / height);
-    ScrolledItem e = ScrolledItem.create(percentFirst, i);
-    return e;
+  private static List<ScrolledItem> scrolledItemList(
+      LinearLayoutManager layoutManager, TopLayoutSpec targetLayout) {
+    return IntStream.rangeClosed(targetLayout.firstPosition(), targetLayout.lastPosition())
+        .mapToObj(position -> toItem(position, layoutManager))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .collect(Collectors.toList());
   }
 
-  private static TargetLayout targetLayout(RecyclerView target, LinearLayoutManager layoutManager) {
-    int firstPosition = layoutManager.findFirstVisibleItemPosition();
-    int lastPosition = layoutManager.findLastVisibleItemPosition();
-    RectEntity rectEntity = rectEntity(target);
-    return TargetLayout.builder()
-        .firstPosition(firstPosition)
-        .lastPosition(lastPosition)
-        .rectEntity(rectEntity)
+  private static Optional<ScrolledItem> toItem(int position, LinearLayoutManager manager) {
+    return Optional.ofNullable(manager.findViewByPosition(position))
+        .map(item -> renderedItem(item, position));
+  }
+
+  private static ScrolledItem renderedItem(View item, int adapterPosition) {
+    return ScrolledItem.create(adapterPosition, rectEntity(item), item.getHeight());
+  }
+
+  private static TopLayoutSpec topLayoutSpec(
+      RecyclerView target, LinearLayoutManager layoutManager) {
+    return TopLayoutSpec.builder()
+        .firstPosition(layoutManager.findFirstVisibleItemPosition())
+        .lastPosition(layoutManager.findLastVisibleItemPosition())
+        .screenRect(rectEntity(target))
         .build();
   }
 
