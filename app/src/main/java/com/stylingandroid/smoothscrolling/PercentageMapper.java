@@ -25,11 +25,18 @@ public class PercentageMapper {
   private static int heightOnScreen(ScrolledItem childItem, TopLayoutSpec parent) {
     RectEntity childRect = childItem.screenRect();
     RectEntity parentRect = parent.screenRect();
+    log(childRect, parentRect);
     if (parentRect.bottom() > childRect.bottom()) {
       return childRect.bottom() - parentRect.top();
     } else {
       return parentRect.bottom() - childRect.top();
     }
+  }
+
+  private static void log(RectEntity childRect, RectEntity parentRect) {
+    Timber.i(
+        "[raw_spec][child]:[top:%s,bottom:%s],[parent]:[top:%s,bottom:%s]",
+        childRect.top(), childRect.bottom(), parentRect.top(), parentRect.bottom());
   }
 
   private static int percentage(ScrolledItem item, int visibleHeight) {
