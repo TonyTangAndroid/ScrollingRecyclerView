@@ -8,15 +8,16 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.jakewharton.rxrelay2.PublishRelay;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
 
   private RecyclerView recyclerView;
   private LargeAdapter adapter;
+  private final PublishRelay<ScrolledModel> relay = PublishRelay.create();
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -31,23 +32,32 @@ public class MainActivity extends AppCompatActivity {
     adapter = LargeAdapter.newInstance(this);
     recyclerView.setAdapter(adapter);
     observeScrollEventToLog();
-    observeScrolledEventToRefreshItem();
+    observeScrolledModelSource();
+    observeScrolledModel();
   }
 
-  private void observeScrolledEventToRefreshItem() {
-    throttleScrolledEvent()
-        .observeOn(AndroidSchedulers.mainThread())
+  private void observeScrolledModel() {
+    scrolledModelStreaming()
         .as(autoDisposable(AndroidLifecycleScopeProvider.from(this)))
-        .subscribe(this::onScrolled);
+        .subscribe(this::onScrolledModelEmitted);
   }
 
-  private Observable<ScrolledEvent> throttleScrolledEvent() {
-    return appDependencies().derivedStreaming().throttledScrolledEvent();
+  private Observable<ScrolledModel> scrolledModelStreaming() {
+    return relay.hide();
   }
 
-  private void onScrolled(ScrolledEvent event) {
-    ScrolledModel assemble = ScrolledModelMapper.assemble(event);
-    assemble.list().forEach(item -> renderItem(item, assemble.topLayoutSpec()));
+  private void observeScrolledModelSource() {
+    scrolledModelSource()
+        .as(autoDisposable(AndroidLifecycleScopeProvider.from(this)))
+        .subscribe(relay);
+  }
+
+  private Observable<ScrolledModel> scrolledModelSource() {
+    return appDependencies().derivedStreaming().scrolledModel();
+  }
+
+  private void onScrolledModelEmitted(ScrolledModel model) {
+    model.list().forEach(item -> renderItem(item, model.topLayoutSpec()));
   }
 
   private void renderItem(ScrolledItem item, TopLayoutSpec targetLayout) {
