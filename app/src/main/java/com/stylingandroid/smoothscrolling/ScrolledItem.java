@@ -5,11 +5,13 @@ import com.google.auto.value.AutoValue;
 @AutoValue
 public abstract class ScrolledItem {
 
-  public abstract int percentage();
+  public abstract int adapterPosition();
 
-  public abstract int position();
+  public abstract RectEntity screenRect();
 
-  public static ScrolledItem create(int percentage, int position) {
-    return new AutoValue_ScrolledItem(percentage, position);
+  public abstract int viewHeight();
+
+  public static ScrolledItem create(int adapterPosition, RectEntity rectEntity, int viewHeight) {
+    return new AutoValue_ScrolledItem(adapterPosition, rectEntity, viewHeight);
   }
 }

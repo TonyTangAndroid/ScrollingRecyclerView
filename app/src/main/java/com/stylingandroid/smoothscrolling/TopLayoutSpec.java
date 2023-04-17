@@ -3,16 +3,16 @@ package com.stylingandroid.smoothscrolling;
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-public abstract class TargetLayout {
+public abstract class TopLayoutSpec {
 
   public abstract int firstPosition();
 
   public abstract int lastPosition();
 
-  public abstract RectEntity rectEntity();
+  public abstract RectEntity screenRect();
 
   public static Builder builder() {
-    return new AutoValue_TargetLayout.Builder();
+    return new AutoValue_TopLayoutSpec.Builder();
   }
 
   @AutoValue.Builder
@@ -22,8 +22,8 @@ public abstract class TargetLayout {
 
     public abstract Builder lastPosition(int lastPosition);
 
-    public abstract Builder rectEntity(RectEntity rectEntity);
+    public abstract Builder screenRect(RectEntity rectEntity);
 
-    public abstract TargetLayout build();
+    public abstract TopLayoutSpec build();
   }
 }
