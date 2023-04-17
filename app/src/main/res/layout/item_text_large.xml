@@ -2,31 +2,77 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="300dp"
-  android:background="@android:color/holo_green_light"
-  android:orientation="vertical">
-
-  <TextView
-    android:id="@+id/tv_percentage"
-    android:layout_width="match_parent"
-    android:layout_height="48dp"
-    android:layout_gravity="center"
-    android:layout_margin="16dp" />
-
-  <TextView
-    android:id="@android:id/text1"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_gravity="center"
-    android:layout_margin="16dp"
-    android:layout_weight="1"
-    android:background="@android:color/holo_red_light"
-    android:padding="16dp" />
-
+  android:background="@android:color/holo_red_light"
+  android:orientation="vertical"
+  android:padding="16dp">
 
   <View
+    android:id="@+id/view_top_divider"
     android:layout_width="match_parent"
     android:layout_height="4dp"
     android:background="@android:color/darker_gray" />
 
+  <LinearLayout
+    android:id="@+id/ll_top_view"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:background="@android:color/holo_green_light"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/tv_title"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:gravity="center_vertical" />
+  </LinearLayout>
+
+  <View
+    android:id="@+id/view_middle_divider_1"
+    android:layout_width="match_parent"
+    android:layout_height="2dp"
+    android:background="@android:color/white" />
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:background="@android:color/holo_green_light"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/tv_percentage"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:gravity="center_vertical" />
+  </LinearLayout>
+
+  <View
+    android:id="@+id/view_middle_divider_2"
+    android:layout_width="match_parent"
+    android:layout_height="2dp"
+    android:background="@android:color/white" />
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:background="@android:color/holo_green_light"
+    android:orientation="vertical">
+
+    <TextView
+      android:id="@+id/tv_content"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_gravity="center"
+      android:gravity="center_vertical" />
+
+  </LinearLayout>
+
+  <View
+    android:id="@+id/view_bottom_divider"
+    android:layout_width="match_parent"
+    android:layout_height="4dp"
+    android:background="@android:color/darker_gray" />
 </LinearLayout>
 

@@ -10,10 +10,8 @@ import static com.google.common.truth.Truth.assertThat;
 import androidx.test.core.app.ActivityScenario;
 import io.reactivex.observers.TestObserver;
 import org.junit.Test;
-import org.robolectric.annotation.GraphicsMode;
 
 /** This is only to assert that the espresso test somehow only could assert the first item. */
-@GraphicsMode(GraphicsMode.Mode.NATIVE)
 public class OnlyFirstItemTest extends SchedulerBaseTest {
 
   @Test
@@ -41,10 +39,10 @@ public class OnlyFirstItemTest extends SchedulerBaseTest {
   }
 
   private void assertTextViewRendered(MainActivity mainActivity) {
-    onView(withText("position 0:100 percentage visible")).check(matches(isDisplayed()));
+    onView(withText("position:0,percentage:100")).check(matches(isDisplayed()));
   }
 
   private void assertTextViewNotRendered(MainActivity mainActivity) {
-    onView(withText("position 1:100 percentage visible")).check(doesNotExist());
+    onView(withText("position:1,percentage:100")).check(doesNotExist());
   }
 }

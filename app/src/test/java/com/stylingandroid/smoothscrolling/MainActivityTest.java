@@ -64,12 +64,12 @@ public class MainActivityTest extends SchedulerBaseTest {
   }
 
   private void assertTextViewRendered(MainActivity mainActivity) {
-    onView(withText("position 0:100 percentage visible")).check(matches(isDisplayed()));
-    //    onView(withText("position 1:100 percentage visible")).check(matches(isDisplayed()));
+    onView(withText("position:0,percentage:100")).check(matches(isDisplayed()));
+    //    onView(withText("position:1,percentage:100")).check(matches(isDisplayed()));
   }
 
   private void assertTextViewNotRendered(MainActivity mainActivity) {
-    onView(withText("position 0:100 percentage visible")).check(doesNotExist());
-    //    onView(withText("position 1:100 percentage visible")).check(matches(isDisplayed()));
+    onView(withText("position:0,percentage:100")).check(doesNotExist());
+    //    onView(withText("position:1,percentage:100")).check(matches(isDisplayed()));
   }
 }

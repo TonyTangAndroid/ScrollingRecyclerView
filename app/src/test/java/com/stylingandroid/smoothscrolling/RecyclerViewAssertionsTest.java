@@ -38,15 +38,11 @@ public class RecyclerViewAssertionsTest extends SchedulerBaseTest {
 
   private void assertTextViewRendered(MainActivity mainActivity) {
     onView(withId(R.id.recyclerview))
-        .check(
-            RecyclerViewAssertions.hasViewWithTextAtPosition(
-                0, "position 0:100 percentage visible"));
+        .check(RecyclerViewAssertions.hasViewWithTextAtPosition(0, "position:0,percentage:100"));
   }
 
   private void assertTextViewNotRendered(MainActivity mainActivity) {
     onView(withId(R.id.recyclerview))
-        .check(
-            RecyclerViewAssertions.hasViewWithTextAtPosition(
-                1, "position 1:100 percentage visible"));
+        .check(RecyclerViewAssertions.hasViewWithTextAtPosition(1, "position:1,percentage:100"));
   }
 }

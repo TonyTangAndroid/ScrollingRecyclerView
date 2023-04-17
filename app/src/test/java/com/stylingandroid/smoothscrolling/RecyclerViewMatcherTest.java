@@ -45,13 +45,12 @@ public class RecyclerViewMatcherTest extends SchedulerBaseTest {
   private void assertTextViewRendered(MainActivity mainActivity) {
 
     onView(withRecyclerView(R.id.recyclerview).atPosition(0))
-        .check(matches(hasDescendant(withText("position 0:100 percentage visible"))));
+        .check(matches(hasDescendant(withText("position:0,percentage:100"))));
   }
 
   private void assertTextViewNotRendered(MainActivity mainActivity) {
     RecyclerViewMatcher recyclerViewMatcher = withRecyclerView(R.id.recyclerview);
     Matcher<View> viewMatcher = recyclerViewMatcher.atPosition(1);
-    onView(viewMatcher)
-        .check(matches(hasDescendant(withText("position 1:100 percentage visible"))));
+    onView(viewMatcher).check(matches(hasDescendant(withText("position:1,percentage:100"))));
   }
 }
